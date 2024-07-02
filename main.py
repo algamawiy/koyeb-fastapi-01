@@ -5,6 +5,8 @@ import requests
 
 app = FastAPI()
 
+API_KEY = '99ac154ca8fcfc5de956a0affe916e82'
+
 
 class Visitor(BaseModel):
     visitor_name: str
@@ -32,7 +34,13 @@ def visitor_info(visitor_name: str, request: Request):
     if ipinfo_response.status_code == 200:
         location_data = ipinfo_response.json()
         city = location_data.get('city', 'Unknown')
-        greeting = f'Hello, {visitor_name}! the tempreture is ... degrees celcius in ...'
+        
+        new_url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric'
+        new_response = requests.get(new_url)
+        data = new_response.json()
+        temperature = data['main']['temp']
+        
+        greeting = f'Hello, {visitor_name}! the tempreture is {temperature} degrees celcius in {city}'
         response = {
             'client_ip' : client_ip,
             'location' : city,
