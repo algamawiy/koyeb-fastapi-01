@@ -1,31 +1,20 @@
 from fastapi import FastAPI, Request
-from pydantic import BaseModel
+
 import requests
 
 
 app = FastAPI()
 
-API_KEY = '99ac154ca8fcfc5de956a0affe916e82'
+#OpenWeatherMap API key
+API_KEY = ''
 
-
-class Visitor(BaseModel):
-    visitor_name: str
- 
-    class Config:
-        from_attributes = True
-
-
-def get_visitor_info():
-    client_ip: str
-    location: str
-    greeting: str
 
 
 @app.get('/api/hello')
 def visitor_info(visitor_name: str, request: Request):
     
-    client_ip = request.client.host
-    ipinfo_token = 'a9507cd10f373c'
+    client_ip = request.client.host    #Get the visitor ip address
+    ipinfo_token = ''     #ipinfo.io api_key
     url = f'https://ipinfo.io/{client_ip}/json'
     headers = {'Authorization': f'Bearer {ipinfo_token}'}
     ipinfo_response = requests.get(url, headers=headers)
